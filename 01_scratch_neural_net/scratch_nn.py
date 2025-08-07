@@ -16,43 +16,69 @@ epochs = 10000      # 학습 반복 횟수
 # - 실습 목적이므로 최소값(2)으로 설정했습니다.
 
 # 가중치 초기화
-np.random.seed(42)
-W1 = np.random.randn(input_size, hidden_size)
-b1 = np.zeros((1, hidden_size))
-W2 = np.random.randn(hidden_size, output_size)
-b2 = np.zeros((1, output_size))
+np.random.seed(42) #랜덤값을 고정해서 실행할 때마다 동일한 결과가 나오도록 합니다(재현성).
+W1 = np.random.randn(input_size, hidden_size) # 입력층에서 은닉층으로 가는 가중치 (정규분포로 초기화)
+b1 = np.zeros((1, hidden_size)) # 은닉층 편향 (0으로 초기화)
+W2 = np.random.randn(hidden_size, output_size) # 은닉층에서 출력층으로 가는 가중치 (정규분포로 초기화)
+b2 = np.zeros((1, output_size)) # 출력층 편향 (0으로 초기화)
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+def sigmoid(x): # 시그모이드 활성화 함수
+    return 1 / (1 + np.exp(-x)) # 시그모이드 함수는 0과 1 사이의 값을 출력합니다.
 
-def sigmoid_deriv(x):
-    return x * (1 - x)
+# np.exp(-x)는 "자연상수 e(약 2.718)"의 -x 제곱을 계산합니다.
+# 예시:
+# x가 0이면: np.exp(-0) → 1
+# x가 1이면: np.exp(-1) → 약 0.3679
+# x가 -1이면: np.exp(-(-1)) = np.exp(1) → 약 2.718
+# 즉, x가 커질수록 결과는 0에 가까워지고, x가 작아질수록(음수) 결과는 커집니다.
+# 이 값은 시그모이드 함수에서 사용되어 입력값을 0~1 사이로 변환하는 데 쓰입니다.
 
-# 학습 루프
-for epoch in range(epochs):
+
+def sigmoid_deriv(x): # 시그모이드 함수의 도함수
+    # 시그모이드 함수의 도함수는 f(x) * (1 - f(x)) 입니다.
+    # 여기서 f(x)는 시그모이드 함수의 출력입니다.
+    # 따라서, x가 시그모이드 함수의 출력일 때, 도함수는 다음과 같이 계산할 수 있습니다.
+    # f'(x) = f(x) * (1 - f(x)) 
+    return x * (1 - x) # 시그모이드 함수의 도함수는 입력값이 0과 1 사이일 때, 출력값이 0과 0.25 사이입니다.
+
+# 학습 루프 
+for epoch in range(epochs): # 반복 횟수만큼 학습합니다.
     # 순전파
-    z1 = np.dot(X, W1) + b1
-    a1 = sigmoid(z1)
-    z2 = np.dot(a1, W2) + b2
-    a2 = sigmoid(z2)
+    z1 = np.dot(X, W1) + b1 # 입력층에서 은닉층으로 가는 선형 변환
+    a1 = sigmoid(z1) # 은닉층의 활성화 함수 적용
+    # 은닉층에서 출력층으로 가는 선형 변환
+    z2 = np.dot(a1, W2) + b2 # 출력층의 선형 변환
+    a2 = sigmoid(z2) # 출력층의 활성화 함수 적용
 
-    # 손실 계산 (MSE)
-    loss = np.mean((y - a2) ** 2)
+    # 손실 계산 (MSE) # MSE(Mean Squared Error) 손실 함수는 예측값과 실제값의 차이를 제곱하여 평균을 구합니다.
+    loss = np.mean((y - a2) ** 2) # MSE는 예측값과 실제값의 차이를 제곱하여 평균을 구하는 방식으로, 값이 작을수록 모델의 예측이 실제값에 가까워진다는 의미입니다.
+
+    # 손실이 0에 가까워질수록 모델의 예측이 실제값에 가까워진다는 의미입니다.
+    # 따라서, 손실이 작아질수록 모델의 성능이 좋아진다고 볼 수 있습니다.
 
     # 역전파
-    d_a2 = (a2 - y) * sigmoid_deriv(a2)
-    d_W2 = np.dot(a1.T, d_a2)
-    d_b2 = np.sum(d_a2, axis=0, keepdims=True)
+    # 출력층에서 은닉층으로 가는 가중치와 편향의 기울기 계산
+    d_a2 = (a2 - y) * sigmoid_deriv(a2) # 출력층의 오차에 시그모이드 도함수를 곱합니다.
+    d_W2 = np.dot(a1.T, d_a2) # 은닉층에서 출력층으로 가는 가중치의 기울기
+    d_b2 = np.sum(d_a2, axis=0, keepdims=True) # 출력층 편향의 기울기
 
-    d_a1 = np.dot(d_a2, W2.T) * sigmoid_deriv(a1)
-    d_W1 = np.dot(X.T, d_a1)
-    d_b1 = np.sum(d_a1, axis=0, keepdims=True)
+    # 은닉층에서 입력층으로 가는 가중치와 편향의 기울기 계산
+    d_a1 = np.dot(d_a2, W2.T) * sigmoid_deriv(a1) # 은닉층의 오차에 시그모이드 도함수를 곱합니다.
+
+    # 역전파 # 은닉층에서 입력층으로 가는 가중치와 편향의 기울기 계산
+    d_a2 = (a2 - y) * sigmoid_deriv(a2) # 출력층의 오차에 시그모이드 도함수를 곱합니다.
+    d_W2 = np.dot(a1.T, d_a2) # 은닉층에서 출력층으로 가는 가중치의 기울기
+    d_b2 = np.sum(d_a2, axis=0, keepdims=True) # 출력층 편향의 기울기
+
+    d_a1 = np.dot(d_a2, W2.T) * sigmoid_deriv(a1) # 은닉층의 오차에 시그모이드 도함수를 곱합니다.
+    d_W1 = np.dot(X.T, d_a1) # 입력층에서 은닉층으로 가는 가중치의 기울기   
+    d_b1 = np.sum(d_a1, axis=0, keepdims=True) # 은닉층 편향의 기울기
 
     # 가중치 업데이트
-    W2 -= lr * d_W2
-    b2 -= lr * d_b2
-    W1 -= lr * d_W1
-    b1 -= lr * d_b1
+    W2 -= lr * d_W2 # 은닉층에서 출력층으로 가는 가중치 업데이트
+    b2 -= lr * d_b2 # 출력층 편향 업데이트
+    W1 -= lr * d_W1 # 입력층에서 은닉층으로 가는 가중치 업데이트
+    b1 -= lr * d_b1 # 은닉층 편향 업데이트
 
     if epoch % 1000 == 0:
         print(f"Epoch {epoch}, Loss: {loss:.4f}")
