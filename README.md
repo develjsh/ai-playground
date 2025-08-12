@@ -21,16 +21,16 @@
 
 | 번호 | 프로젝트 | 설명 | 상태 |
 |------|-----------|------|------|
-| 01 | [Scratch Neural Network](./01_scratch_neural_net) | 파이썬으로 신경망을 처음부터 구현 | 진행 중 |
-| 02 | [Traffic Sign Classifier](./02_traffic_sign_classifier) | 교통 표지판 이미지 분류 | 진행 중 |
-| 03 | [Breast Cancer Classification](./03_breast_cancer_classifier) | 유방암 진단 데이터로 양성/악성 분류 | 완료 |
-| 04 | [Gender Recognition from Voice](./04_gender_from_voice) | 음성 특성을 통해 성별 예측 | 완료 |
-| 05 | [Image Caption Generator](./05_image_captioning) | 이미지를 설명하는 캡션 생성 | 진행 중 |
-| 06 | [Music Genre Classification](./06_music_genre_classification) | 음악 오디오로 장르 예측 | 진행 중 |
-| 07 | [Colorize B&W Images](./07_bw_image_colorization) | 흑백 이미지에 색 입히기 | 진행 중 |
-| 08 | [Driver Drowsiness Detection](./08_driver_drowsiness_detection) | 얼굴/눈 움직임으로 졸음 탐지 | 진행 중 |
-| 09 | [CIFAR-10 Image Classification](./09_cifar10_classification) | 10개 카테고리 이미지 분류 | 진행 중 |
-| 10 | [Age Detection](./10_age_detection) | 얼굴 사진으로 나이 추정 | 진행 중 |
+| 01 | [Scratch Neural Network](./01_scratch_neural_net) | 파이썬으로 신경망을 처음부터 구현 | 완료 |
+| 02 | [Traffic Sign Classifier](./02_traffic_sign_classifier) | 교통 표지판 이미지 분류 | 완료 |
+| 03 | [Breast Cancer Classification](./03_breast_cancer_classifier) | 유방암 진단 데이터로 양성/악성 분류 | 진행 중 |
+| 04 | [Gender Recognition from Voice](./04_gender_from_voice) | 음성 특성을 통해 성별 예측 | 미진행 |
+| 05 | [Image Caption Generator](./05_image_captioning) | 이미지를 설명하는 캡션 생성 | 미진행 |
+| 06 | [Music Genre Classification](./06_music_genre_classification) | 음악 오디오로 장르 예측 | 미진행 |
+| 07 | [Colorize B&W Images](./07_bw_image_colorization) | 흑백 이미지에 색 입히기 | 미진행 |
+| 08 | [Driver Drowsiness Detection](./08_driver_drowsiness_detection) | 얼굴/눈 움직임으로 졸음 탐지 | 미진행 |
+| 09 | [CIFAR-10 Image Classification](./09_cifar10_classification) | 10개 카테고리 이미지 분류 | 미진행 |
+| 10 | [Age Detection](./10_age_detection) | 얼굴 사진으로 나이 추정 | 미진행 |
 
 ---
 
