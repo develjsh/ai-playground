@@ -31,8 +31,8 @@
 | 08 | [Driver Drowsiness Detection](./08_driver_drowsiness_detection) | 얼굴/눈 움직임으로 졸음 탐지 | 미진행 |
 | 09 | [CIFAR-10 Image Classification](./09_cifar10_classification) | 10개 카테고리 이미지 분류 | 미진행 |
 | 10 | [Age Detection](./10_age_detection) | 얼굴 사진으로 나이 추정 | 미진행 |
-| 99 | [Credit Card Fraud Detection](./99_Credit Card Fraud Detection) | 신용카드 이상거래 탐지하기 | 진행 |
-
+| 99 | [Credit Card Fraud Detection](./99_credit_card_fraud_detection) | 신용카드 이상거래 탐지하기 | 완료 |
+| 100 | [MCP chatbot](./99_mcp_chatbot) | mcp chatbot | 진행 |
 ---
 
 ## 실행 방법
