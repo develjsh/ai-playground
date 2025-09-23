@@ -7,6 +7,3 @@ Model Context Protocool을 사용하여 보다 쉽게 질문과 상황에 맞게
 
 ## 설치 라이브러리
 *가상환경: python3 -m ven venv
-
-- v0: 
-pip install fastapi uvicorn fastmcp transformers torch requests
