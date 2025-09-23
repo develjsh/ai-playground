@@ -141,6 +141,9 @@ User message: {user_message}
             }
         else:
             raise HTTPException(status_code=400, detail=f"Unexpected tool_name from router: {tool_name}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        raise HTTPException(status_code=500, detail=f"An internal server error occurred: {e}")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8001)
