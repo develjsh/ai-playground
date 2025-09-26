@@ -17,7 +17,7 @@ class NaturalLanguageRequest(BaseModel):
 # Global instances
 ollama_client: httpx.AsyncClient = None # Ollama HTTP 클라이언트
 mcp_client: Client = None
-OLLAMA_ROUTER_MODEL_NAME = "gpt-oss 20b" # 라우터 역할을 할 Ollama 모델 이름
+OLLAMA_ROUTER_MODEL_NAME = "gpt-oss:20b" # 라우터 역할을 할 Ollama 모델 이름
 
 @app.on_event("startup")
 async def startup_event():
@@ -62,16 +62,16 @@ async def chat_web(request: NaturalLanguageRequest):
         tool_descriptions = f"""
 You are an AI assistant that can route user queries to different LLM models.
 Available LLM models:
-- llama3: A powerful general-purpose model. Use this for general questions.
-- mistral: A fast and efficient model. Use this for quick, concise answers.
-- gpt-oss 20b: (This is me, the router. You can ask me to answer directly too.)
+- deepseek-r1:8b: A powerful general-purpose model. Use this for general questions.
+- mistral:latest: A fast and efficient model. Use this for quick, concise answers.
+- gpt-oss:20b: (This is me, the router. You can ask me to answer directly too.)
 
 To get a response from a specific LLM, you must specify which model to use.
-Example: "llama3 모델을 사용해서 '인공지능이란 무엇인가?'에 대해 설명해줘."
-Example: "mistral 모델로 '프랑스 파리'에 대해 설명해줘."
+Example: "deepseek-r1:8b 모델을 사용해서 '인공지능이란 무엇인가?'에 대해 설명해줘."
+Example: "mistral:latest 모델로 '프랑스 파리'에 대해 설명해줘."
 
 Respond with a JSON object in the format: {{"tool_name": "call_llm_tool", "tool_args": {{"model_name": "...", "prompt": "..."}}}}
-If no specific LLM is requested or you want me (gpt-oss 20b) to answer directly, use {{"tool_name": "none", "response": "..."}}.
+If no specific LLM is requested or you want me (gpt-oss:20b) to answer directly, use {{"tool_name": "none", "response": "..."}}.
 Ensure your response is a valid JSON string.
 """
 
@@ -120,7 +120,11 @@ User message: {user_message}
             direct_response = f"Ollama did not return valid JSON. Raw response: {llm_generated_json_str}"
 
         if tool_name == "none":
-            return {"status": "success", "response": direct_response}
+            return {
+                "status": "success",
+                "response": direct_response,
+                "model": OLLAMA_ROUTER_MODEL_NAME
+            }
         elif tool_name == "call_llm_tool": # 이제 mcp_server는 이 도구만 가집니다.
             model_to_call = tool_args.get("model_name")
             prompt_for_llm = tool_args.get("prompt")
