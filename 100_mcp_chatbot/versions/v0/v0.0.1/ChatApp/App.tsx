@@ -55,49 +55,57 @@ const App = () => {
     }
   };
 
-  // 메시지 전송 처리 함수
+  // 봇 메시지를 화면에 추가하는 함수
+  const handleBotMessage = (text: string) => {
+      const newMessage: Message = {
+      id: Date.now().toString() + '-bot',
+      text: text,
+      sender: 'bot',
+    };
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  };
+
+  // 사용자가 보낸 메시지를 화면에 추가하는 함수
+  const handleUserMessage = (text: string) => {
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      text: text,
+      sender: 'user',
+    };
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  };
+
+  // 메시지 전송 및 AI 응답 처리 함수
   const handleSendMessage = async () => {
-    if (inputText.trim().length === 0 || isLoading) {
+    const trimmedInput = inputText.trim();
+    if (trimmedInput.length === 0 || isLoading) {
       return;
     }
 
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: inputText,
-      sender: 'user',
-    };
+    // 1. 사용자 메시지를 화면에 표시
+    handleUserMessage(trimmedInput);
 
-    setMessages(prevMessages => [...prevMessages, newMessage]);
+    // 2. API 요청 준비
     setInputText('');
     setIsLoading(true);
 
     try {
+      // 3. 백엔드 API에 요청
       const response = await fetch('http://localhost:8001/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ msg: inputText }),
+        body: JSON.stringify({ msg: trimmedInput }),
       });
 
       const data = await response.json();
       const botResponseText = data.llm_response || data.response || '죄송합니다, 응답을 처리할 수 없습니다.';
 
-      const botMessage: Message = {
-        id: Date.now().toString() + '-bot',
-        text: botResponseText,
-        sender: 'bot',
-      };
-      setMessages(prevMessages => [...prevMessages, botMessage]);
-
+      handleBotMessage(botResponseText);
     } catch (error) {
       console.error('Error fetching bot response:', error);
-      const errorMessage: Message = {
-        id: Date.now().toString() + '-error',
-        text: '오류가 발생했습니다. 다시 시도해주세요.',
-        sender: 'bot',
-      };
-      setMessages(prevMessages => [...prevMessages, errorMessage]);
+      handleBotMessage('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
     }
