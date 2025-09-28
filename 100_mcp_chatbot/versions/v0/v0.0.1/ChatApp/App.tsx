@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#007bff',
+    backgroundColor: '#007bf4',
     borderRadius: 20,
   },
   sendButtonText: {
