@@ -5,12 +5,25 @@
 - Mac m1
 - Python 3.10.14
 
-## 설치 라이브러리
-*가상환경: python3 -m ven venv
+## 설치 방법 (Installation)
 
-- v0: 
-pip install fastapi uvicorn fastmcp transformers torch requests
+### 1. Python 가상환경 생성 및 활성화
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
+### 2. 시스템 의존성 설치 (macOS with Homebrew)
+PDF 분석 및 OCR 기능에 필요한 핵심 엔진들을 설치합니다.
+```bash
+brew install libmagic tesseract poppler
+```
+
+### 3. Python 라이브러리 설치
+프로젝트 실행에 필요한 모든 Python 라이브러리를 설치합니다.
+```bash
+pip install fastapi uvicorn fastmcp transformers torch requests python-magic Pillow pytesseract PyMuPDF
+```
 
 ## 지원 LLM model
 NAME              ID              SIZE

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
@@ -61,11 +60,8 @@ const App = () => {
 
   const handleAttachment = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
+      const res = await DocumentPicker.pickSingle({ type: [DocumentPicker.types.allFiles] });
 
-      // Show a placeholder message for the user
       addMessage({ id: Date.now().toString(), text: `파일 보내는 중: ${res.name}`, sender: 'user' });
       setIsLoading(true);
 
@@ -79,16 +75,14 @@ const App = () => {
       });
 
       const responseData = await uploadResponse.json();
-      if (!uploadResponse.ok) {
-        throw new Error(responseData.detail || 'File upload failed');
-      }
+      if (!uploadResponse.ok) throw new Error(responseData.detail || 'File upload failed');
 
-      // Create a new message from the bot based on the file type
       const botMessage = {
         id: Date.now().toString() + '-bot',
         sender: 'bot',
-        text: responseData.content_type.startsWith('image/') ? null : responseData.info,
-        imageUrl: responseData.content_type.startsWith('image/') ? responseData.file_url : null,
+        // Use original_filename for the text, and file_url for the image
+        text: responseData.file_url ? `이미지: ${responseData.original_filename}` : responseData.info,
+        imageUrl: responseData.file_url || null,
       };
       addMessage(botMessage);
 
@@ -137,7 +131,7 @@ const App = () => {
           renderItem={renderMessage}
           keyExtractor={item => item.id}
           style={styles.messageList}
-          contentContainerStyle={{ paddingBottom: 10 }}
+          contentContainerStyle={{ paddingBottom: 10 }} 
         />
         {isLoading && (
           <View style={styles.loadingContainer}>
